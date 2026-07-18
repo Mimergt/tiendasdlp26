@@ -93,14 +93,6 @@ jQuery(document).ready(function ($) {
   'El gallito zona 3 capital',
   'Avenida bolivar zona 3 capital',
   'Colonia el inciencio zona 3 capital',
-	'Zona 5 - Ciudad',
-	'Zona 9 - Ciudad',
-	'Zona 10 - Ciudad',
-	'Zona 13 - Ciudad',
-	'Zona 14 - Ciudad',
-	'Zona 15 - Ciudad',
-	'Zona 16 - Ciudad',
-	'Santa catarina Pinula hasta el km 11',
   'Residenciales montebello 2',
   'Condominio Cumbres de la Arboleda ',
   'Residenciales vistas del valle',
@@ -305,211 +297,22 @@ jQuery(document).ready(function ($) {
   'Colonia el Incienso Zona 7 Capital',
   'Torres de tulam tzu zona 4 de mixco',
   'Cañadas del naranjo zona 4 de mixco',
-  'Colonia valle del sol zona 4 de mixco',
-  'Zona 1 de Mixco',
-	'Zona 8 de Mixco',
-	'Zona 1 de Villa Nueva',
-	'Zona 2 de Villa Nueva',
-	'Zona 4 de Villa Nueva',
-	'Zona 5 de Villa Nueva',  
-	'Colinas de Monte María',
-	'Colinas de Monte María Sur',
-	'Call Center GENTRAC',
-	'AVICOLA',
-	'San José Villa Nueva',
-	'Lomas del Sur',
-	'Campos de San José',
-	'Llano Alto 1,2, 3, 4, 5 Y 6',
-	'Residenciales TERRANOVA',
-	'Los Celajes',
-	'Colonia Los Celajes',
-	'Jardines de San José',
-	'Colonia Los Olivos',
-	'Condominio Valle Verde',
-	'ENCA',
-	'Alto de San Barcenas 1.2 Y 3',
-	'Condominios TANQUES 1,2 Y 3',
-	'Condominios Bosques de San José',
-	'Colonia Valle Verde VN',
-	'Valles de María',
-	'Hacienda de Las Flores',
-	'Residenciales Villa Lobos',
-	'Valles de Doña Leonor',
-/*	'Zona 3 San Miguel Petapa', */
-/*	'Zona 7 de San Miguel Petapa', */
-/*	'Zona 8 San Miguel Petapa', */
-	'Zona 11 San Miguel Petapa', 
-/*	'Zona 13 San Miguel Petapa', */
-	'Amatitlán',
-	'Residenciales Petapa 1 y 2',
-	'San miguelito',
-	'Covitigss',
-	'Residenciales el tabacal',
-	'Colonia la felicidad',
-	'Reformadores',
-	'Ciudad del sol',
-	'Arada 1 y 2',
-	'Jardines de la virgen',
-	'Jardines del carmen 1 y 2',
-	'Fuentes de valle 1, 2,3, 4 y 5',
-	'Condado el carmen',
-	'villas del condado 1 y 2',
-	'Prados de castilla',
-	'Luminela',
-	'Adarha',
-	'Colonia enriqueta',
-	'Colonia los planes',
-	'Panorama del frutal',
-	'Colonia paraiso del frutal',
-	'Colonia el paraiso 1 y 2',
-	'Entre valles',
-	'Solana entrevalles',
-	'frutal 1,2,3,4 y 5',
-	'fuentes del valle 1 y 2',
-	'Prados de tabal 1 y 2',
-	'Altos de fuentes 1,2 y 3',
-	'Paseo las fuentes 1,2 y 3',
-	'Villa hermosa 1 y 2',
-	'Prados de villa hermosa',
-	'Alamedas de san miguel',
-	'Colonia santa ines',
-	'Colonia eucaliptos',
-	'Colonia las palmas',
-	'Condominio villa real',
-	'La joya 1 y 2',
-	'Pradera del sur',
-	'Villa la joya',
-	'Los arcos',
-	'Valles de san miguel',
-	'San luis',
-	'El rosario',
-	'Viñas del sur',
-	'Los amates',
-	'Colonia eterna primavera',
-	'Prados de sonora',
-	'Villa de san mateo',
-	'Catalina linda vista',
-	'Valles de sonora 1,2,3 y 4',
-	'Residenciales doña leonor',
-	'Santorini',
-	'Colonia el cortijo',
-	'Guatel',
-	'Condominio el prado',
-	'Inde y guatel 2',
-	'Residenciales altamira',
-	'Altos de sonora',
-	'Jardines de la mancion 1 y 2',
-	'Torres de villa hermosa'
+  'Colonia valle del sol zona 4 de mixco'
  
   ];
 
-  let gtgu_opciones_2 = [
-	  '',
-    'Zona 1 - Quetzaltenango',
-    'Zona 2 - Quetzaltenango',
-    'Zona 3 - Quetzaltenango',
-    'Zona 4 - Quetzaltenango',
-    'Zona 5 - Quetzaltenango',
-    'Zona 6 - Quetzaltenango',
-    'Zona 7 - Quetzaltenango',
-    'Zona 8 - Quetzaltenango',
-    'Zona 9 - Quetzaltenango',
-    'Zona 10 - Quetzaltenango',
-    'Zona 11 - Quetzaltenango',
-    'Zona 12 - Quetzaltenango',
-    'Parque el carmen - Salcaja',
-    'Curruchique - Salcaja',
-    'Baños de san juan salcaja - Salcaja',
-    'Mirador barrio boys - Salcaja',
-    'Barrio nuevo - Salcaja',
-    'Cementerio municipal - Salcaja',
-   'Parque san luis salcaja - Salcaja',
-   'Aldea infantil rudolf walther - Salcaja',
-    'Arenal - Salcaja',
-    'Cruz del milagro - Salcaja',
-    'Bella tierra - Salcaja',
-   'Bosque magico - Salcaja',
-   'Parque memorial los olivos - Salcaja',
-   'Cancha marroquin - Salcaja',
-   'Mirador el carmen - Salcaja', 
-  'Cruz de las madres - Salcaja'
-  ];
+  let gtgu_opciones_2 = [''];
 
-  let gtgu_opciones_3 = [
-	  '',
-	  'Zona 1 - Chimaltenango',
-    'Zona 2 - Chimaltenango',
-    'Zona 3 - Chimaltenango',
-    'Zona 4 - Chimaltenango',
-    'Zona 5 - Chimaltenango',
-    'Zona 6 - Chimaltenango',
-    'Zona 7 - Chimaltenango',
-    'Zona 8 - Chimaltenango',
-    'Zona 9 - Chimaltenango',
-    'Zona 10 - Chimaltenango',
-    'Zona 11 - Chimaltenango'];
+  let gtgu_opciones_3 = [''];
 
-  let gtgu_opciones_4 = [
-	  '',
-	  'Zona 1 - Escuintla',
-    'Zona 2 - Escuintla',
-    'Zona 3 - Escuintla',
-    'Zona 4 - Escuintla'];
+  let gtgu_opciones_4 = [''];
 
-  let gtgu_opciones_5 = [
-	  '',
-	  'Zona 1 - Jutiapa',
-    'Zona 2 - Jutiapa',
-    'Zona 3 - Jutiapa',
-    'Zona 4 - Jutiapa'];
+  let gtgu_opciones_5 = [''];
   
-   let gtgu_opciones_6 = [
-	   '',
-	   'Zona 1 - Retalhuleu',
-    'Zona 2 - Retalhuleu',
-    'Zona 3 - Retalhuleu',
-	'Zona 4 - Retalhuleu',
-    'Zona 5 - Retalhuleu',
-    'Zona 6 - Retalhuleu',
-	'Zona 7 - Retalhuleu',
-    'Zona 8 - Retalhuleu'];
-   let gtgu_opciones_7 = [
-	   '',
-	   'Zona 1 - Coatepeque',
-    'Zona 2 - Coatepeque',
-    'Zona 3 - Coatepeque',
-	'Zona 4 - Coatepeque'];
+   let gtgu_opciones_6 = [''];
+   let gtgu_opciones_7 = [''];
 	
-  let gtgu_opciones_8 = [
-    '',
-    'Barrio la cienaga - San Cristobal Totonicapan',
-    'Xetacabaj - San Cristobal Totonicapan',
-    'Barrio la cienaga hasta la xelac - San Cristobal Totonicapan',
-    'moreria - San Cristobal Totonicapan',
-    'Barrio la independencia 1, y 2 - San Cristobal Totonicapan',
-    'Barrio el calvario - San Cristobal Totonicapan',
-    'Barrio el santiago - San Cristobal Totonicapan',
-    'Baños chiquitos - San Cristobal Totonicapan',
-    'Barrio las claras - San Cristobal Totonicapan',
-    'Barrio el chorro - San Cristobal Totonicapan',
-    'Pasarela - San Cristobal Totonicapan',
-    'San sebastian 1 y 2 - San Cristobal Totonicapan',
-    'San salvador - San Cristobal Totonicapan',
-    'Puente marimba - San Cristobal Totonicapan',
-    'Cuatro caminos - San Cristobal Totonicapan',
-    'Rastro - San Cristobal Totonicapan',
-    'Baños grandes - San Cristobal Totonicapan',
-    'Sector de las picinas de fray - San Cristobal Totonicapan',
-    'Xecanchavox mas conocido la cruz - San Cristobal Totonicapan',
-    'Xecanchavox escuela intervida - San Cristobal Totonicapan',
-    'Aldeas de San Cristobal Totonicapan - San Cristobal Totonicapan',
-    'Xesuc  carretera principal - San Cristobal Totonicapan',
-    'San ramon  carretera pincipal hasta la iglesia - San Cristobal Totonicapan',
-    'Pacanac carretera pincipal - San Cristobal Totonicapan',
-    'Patachaj carretera pincipal - San Cristobal Totonicapan',
-    'Aldea nueva candelaria carretera pincipal hasta el centro  - San Cristobal Totonicapan'
-  
-  ];
+  let gtgu_opciones_8 = [''];
 	
 	
  let gtgu_opciones_9 = [
@@ -528,35 +331,12 @@ jQuery(document).ready(function ($) {
     'Las Marias',		 	 	 	 	 	 
     'Chipo',		 	 	 	 	 	 	 
   'San Carlos',		 	 	 	 	 	 	 
-
-	'Universidad Mariano Gálvez - Mazate',
-    'Universidad Da Vinci de Guatemala - Mazate',
-    'INTECAP Suchitepéquez - Mazate',
-    'Hotel Costa Verde - Mazate',
-    'Hotel Alba - Mazate',
-    'Bambú Resort - Mazate',
-    'Hotel Villa Isabel - Mazate',
-    'Hotel Roma - Mazate',
-    'Auto Hotel Frome - Mazate',
-    'Colegio Centroamericano - Mazate',
-    'Colegio Froebel - Mazate',
-    'Centro de Estudios Integrales - Mazate',
-    'Colegio Científico - Mazate',
-    'Colegio Hebrón - Mazate'
   
   ];
 
 	
 	
-	let gtgu_opciones_10 = [
-    '',
-    'Jalapa - Zona 1',
-    'Jalapa - Zona 2',
-    'Jalapa - Zona 5',	 
-    'Jalapa - Zona 6',	 	 
-    'Jalapa - Zona 7'	
-  
-  ];
+	let gtgu_opciones_10 = [''];
 	
 let gtgu_opciones_11 = [
     '',
@@ -691,38 +471,7 @@ let gtgu_opciones_12 = [
     'Lotificación Villas de Manolo chiquimula'
 ];
 
-let gtgu_opciones_14 = [
-    '',
-    'Colonia Santa agape Huhuetenango',
-    'Residencial bosqueta Huehuetenango',
-    'Colonia el Valle Huehuetenango',
-    'Colonia las Flores Huehuetenango',
-    'Colonia Reyna Huhuetenango',
-    'Colonia el prado Huehuetenango',
-    'Colonia la bendición Huhuetenango',
-    'Proyecto san José Huhuetenango',
-    'Cambote zona 11 Huehuetenango',
-    'Barrio san Miguel Huhuetenango',
-    'Laguna de zaculeu Huhuetenango',
-    'Colonia moscamed de las lagunas Huhuetenango',
-    'Quinta Samayoa Huhuetenango',
-    'Condominio del bosque Gardens Huhuetenango',
-    'Condado los encinos Huhuetenango',
-    'El manantial Huhuetenango',
-    'La Salle diversificado Huhuetenango',
-    'Condominio el Pedregal Huhuetenango',
-    'Chimusinique Huhuetenango',
-    'La joya Huhuetenango',
-    'Residenciales villa verde Huhuetenango',
-    'Condominio Santa fe Huhuetenango',
-    'Colonia los castillos Huhuetenango',
-    'Colonia la Hondonada Huhuetenango',
-    'Colonia el bosque Huhuetenango',
-    'Colonia san Sebastián Huhuetenango',
-    'Colonia las luces Huhuetenango',
-    'Apartamentos la floresta Huhuetenango',
-    'Colonia la floresta Huhuetenango'
-];
+let gtgu_opciones_14 = [''];
 	
 
 		
