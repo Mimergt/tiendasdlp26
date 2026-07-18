@@ -637,7 +637,41 @@ let gtgu_opciones_12 = [
     'Lotificación Villas de Manolo chiquimula'
 ];
 
-let gtgu_opciones_14 = [''];
+let gtgu_opciones_14 = [
+  '',
+  // Huehuetenango 144324
+  'Colonia Santa agape Huhuetenango',
+  'Residencial bosqueta Huehuetenango',
+  'Colonia el Valle Huehuetenango',
+  'Colonia las Flores Huehuetenango',
+  'Colonia Reyna Huhuetenango',
+  'Colonia el prado Huehuetenango',
+  'Colonia la bendición Huhuetenango',
+  'Proyecto san José Huhuetenango',
+  'Cambote zona 11 Huehuetenango',
+  'Barrio san Miguel Huhuetenango',
+  'Laguna de zaculeu Huhuetenango',
+  'Colonia moscamed de las lagunas Huhuetenango',
+  'Quinta Samayoa Huhuetenango',
+  'Condominio del bosque Gardens Huhuetenango',
+  'Condado los encinos Huhuetenango',
+  'El manantial Huhuetenango',
+  'La Salle diversificado Huhuetenango',
+  'Condominio el Pedregal Huhuetenango',
+  'Chimusinique Huhuetenango',
+  'La joya Huhuetenango',
+  'Residenciales villa verde Huhuetenango',
+  'Condominio Santa fe Huhuetenango',
+  'Colonia los castillos Huhuetenango',
+  'Colonia la Hondonada Huhuetenango',
+  'Colonia el bosque Huhuetenango',
+  'Colonia san Sebastián Huhuetenango',
+  'Colonia las luces Huhuetenango',
+  'Apartamentos la floresta Huhuetenango',
+  'Colonia la floresta Huhuetenango',
+  'San vicente huehuetenango',
+  'Villas el encanto Huehuetenango '
+];
 	
 
 		
