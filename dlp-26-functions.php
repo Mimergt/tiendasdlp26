@@ -16,7 +16,7 @@ add_action('wp_enqueue_scripts', function() {
 
     //wp_register_script( 'google_api', 'http://maps.google.com/maps/api/js?key=AIzaSyD3yyERvzeZ5PAUKHxwO46W8qeyvLkeSlc&libraries=places', array('jquery'), '4.0.3', true );
     //wp_enqueue_script('google_api');
-    wp_register_script('custom_script', site_url() . '/wp-content/themes/dlp/custom_script.js?var=' . time(), array('jquery'), '4.0.3', true);
+    wp_register_script('custom_script', site_url() . '/wp-content/themes/dlp/cutosm_script_26.js?var=' . time(), array('jquery'), '4.0.3', true);
     wp_enqueue_script('custom_script');
     wp_register_script('locationpicker', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-locationpicker/0.1.12/locationpicker.jquery.min.js', array('jquery'), '4.0.3', false);
     wp_enqueue_script('locationpicker');
