@@ -49,7 +49,6 @@ function customer_order_confirm_args($order_id) {
 add_action('woocommerce_thankyou', 'complete_action_button_my_accout_order_view1', 5);
 
 function complete_action_button_my_accout_order_view1($order_id) {
-    // Avoiding displaying buttons on email notification
     $order = wc_get_order($order_id);
     $data = customer_order_confirm_args($order_id);
     if ($order->get_meta('woofood_order_type') == 'pickup' && $order->has_status('dlv')) {
@@ -89,6 +88,21 @@ function complete_action_button_my_accout_order_view1($order_id) {
         echo '';
         ?>
 
+    <?php
+    }
+}
+
+// Add a custom button to processing orders (My account > View order)
+add_action('woocommerce_order_details_after_order_table', 'complete_action_button_my_accout_order_view');
+
+function complete_action_button_my_accout_order_view($order) {
+    if (is_wc_endpoint_url('view-order')) {
+        $data = customer_order_confirm_args($order->get_id());
+        if ($order->has_status('dlv') && $order->get_meta('woofood_order_type') == 'pickup') {
+            echo '<div style="margin:16px 0 24px;">
+                <button class="button changeStatus" data-order-id="' . $order->get_id() . '" href="' . $data['url'] . '">' . $data['name'] . '</button>
+            </div>';
+            ?>
 
             <script>
                 jQuery(document).on('click', '.changeStatus', function (e) {
@@ -1030,27 +1044,23 @@ case "Zona 11 San Miguel Petapa": $tienda_asignada = 2248;
             break;	        			
 		case "Entrada Chipo": $tienda_asignada = 105305;
             break;	  
-		case "Nueva Esperanza": $tienda_asignada = 105305;
+        case "Nueva esperanza": $tienda_asignada = 105305;
             break;	  
-		case "Buena vista": $tienda_asignada = 105305;
+        case "Buena Vista": $tienda_asignada = 105305;
             break;	  			
 		case "Vista Hermosa": $tienda_asignada = 105305;
             break;	  						
-		case "El manantial": $tienda_asignada = 105305;
+        case "El Mantial": $tienda_asignada = 105305;
             break;	  									
-		case "Los sauces": $tienda_asignada = 105305;
+        case "Los Sauces": $tienda_asignada = 105305;
             break;	  												
-		case "Oxipec dentro": $tienda_asignada = 105305;
+        case "Oxipec Dentro": $tienda_asignada = 105305;
             break;	  											
 		case "Las Marias": $tienda_asignada = 105305;
             break;	  								
-		case "Santa Terecita": $tienda_asignada = 105305;
-            break;	  											
 		case "Chipo": $tienda_asignada = 105305;
             break;	  												
 		case "San Carlos": $tienda_asignada = 105305;
-            break;	  										
-		case "Centro de Salud San Juan Bautista": $tienda_asignada = 105305;
             break;	  											
 
 		case "Barrio la cienaga - San Cristobal Totonicapan": $tienda_asignada = 105305;
