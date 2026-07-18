@@ -89,22 +89,6 @@ function complete_action_button_my_accout_order_view1($order_id) {
         echo '';
         ?>
 
-    <?php
-    }
-}
-
-// Add a custom button to processing orders (My account > View order)
-add_action('woocommerce_order_details_after_order_table', 'complete_action_button_my_accout_order_view');
-
-function complete_action_button_my_accout_order_view($order) {
-    // Avoiding displaying buttons on email notification
-    if (is_wc_endpoint_url('view-order')) {
-        $data = customer_order_confirm_args($order->get_id());
-        if ($order->has_status('dlv') && $order->get_meta('woofood_order_type') == 'pickup') {
-            echo '<div style="margin:16px 0 24px;">
-                <button class="button changeStatus" data-order-id="' . $order->get_id() . '" href="' . $data['url'] . '">' . $data['name'] . '</button>
-            </div>';
-            ?>
 
             <script>
                 jQuery(document).on('click', '.changeStatus', function (e) {
@@ -319,19 +303,161 @@ function new_store_meta($order_id) {
             break;
        
 			// Calle Marti
-        case "Zona 1 - Ciudad": $tienda_asignada = 2239;
+        case "Condominio Valle del zapote zona 2 capital": $tienda_asignada = 2239;
             break;
-        case "Zona 2 - Ciudad": $tienda_asignada = 2239;
+        case "Condominio Monte limar zona 2 capital": $tienda_asignada = 2239;
             break;
-        case "Zona 4 - Ciudad": $tienda_asignada = 2239;
+        case "Condominio Encinos del zapote zona 2 capital": $tienda_asignada = 2239;
             break;
-        case "Zona 6 - Ciudad": $tienda_asignada = 2239;
+        case "Finca el zapote zona 2 capital": $tienda_asignada = 2239;
             break;
-       
-			//Alamos
-        case "Zona 18 - Ciudad": $tienda_asignada = 2239;
+        case "Vertical el Zapote zona 2 capital": $tienda_asignada = 2239;
             break;
-        case "Carretera al Atlántico hasta el km 10.5": $tienda_asignada = 2239;
+        case "Residenciales el Karal zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Condominio Villas del zapote zona 2 de capital": $tienda_asignada = 2239;
+            break;
+        case "Condominio Jardines del zapote zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Jardines santa delfina zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Cerveceria Centroamericana zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida simeon cañas zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Apartamentos 8-80 zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida indepencia zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Apartamentos santa clara zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Condominio villa marti zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Residenciales ciudad nueva 1 zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia las 3 ceibas zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Villa verona zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Residenciales Maria ines zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Calle clutural Barrio moderno zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Residenciales Maria alejandra zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Hermanos cooper zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Condominio la floresta zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Condominio Alamedas de san Gabriel zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Residenciales san angel 2 y 3 zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "San angel 2 y 3 zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Villas arcangel zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Residenciales san angel 4 zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Villas de san angel zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Reserva san angel zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Parque san angel zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Peñon de san angel zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Ciudad nueva zona 2 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia lo de bran zona 3 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida elena": $tienda_asignada = 2239;
+            break;
+        case "Zona 3 capital a hasta la 23 calle": $tienda_asignada = 2239;
+            break;
+        case "Colonia las victorias zona 1 capital": $tienda_asignada = 2239;
+            break;
+        case "Matamoros zona 1": $tienda_asignada = 2239;
+            break;
+        case "Distribuidora el caribe zona 1 capital": $tienda_asignada = 2239;
+            break;
+        case "Mercado colon zona 1 capital": $tienda_asignada = 2239;
+            break;
+        case "Gerona zona 1 capital": $tienda_asignada = 2239;
+            break;
+        case "Hasta la 24 calle de la zona 1 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia 10 de mayo zona 1 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida Centro america zona 1 capital ": $tienda_asignada = 2239;
+            break;
+        case "Centro comercial zona 4 capital": $tienda_asignada = 2239;
+            break;
+        case "Intecap zona 4 capital": $tienda_asignada = 2239;
+            break;
+        case "Terminal zona 4": $tienda_asignada = 2239;
+            break;
+        case "Colonia proyectos 4-3 zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia proyectos 4-4 zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia bienestar social zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Villa de los niños zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "cipresales zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Residencial cipresales zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Barrio san antonio hasta las 12 calle": $tienda_asignada = 2239;
+            break;
+        case "Torre marti zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia Martinico 1 y 2 zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia melgar diaz zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Condominio parroquia zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia los angeles zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Finca san rafael zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia el Molino zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Santa isabel 1 y 2 zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Estadio cementos progreso zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Barrio el gallito zona 3 capital": $tienda_asignada = 2239;
+            break;
+        case "Santa faz zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "San julian zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Santa marta zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Santa Luisa zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "El sausalito zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "La joya de senahu zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida totonicapan zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida alta verapaz zona 6 capital ": $tienda_asignada = 2239;
+            break;
+        case "La reinita zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia san juan de dios zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "La joyita zona 6 capital": $tienda_asignada = 2239;
+            break;
+        case "El gallito zona 3 capital": $tienda_asignada = 2239;
+            break;
+        case "Avenida bolivar zona 3 capital": $tienda_asignada = 2239;
+            break;
+        case "Colonia el inciencio zona 3 capital": $tienda_asignada = 2239;
             break;
         //SanCristobal
         case "Zona 1 de Mixco": $tienda_asignada = 3068;
@@ -740,21 +866,6 @@ case "Zona 11 San Miguel Petapa": $tienda_asignada = 2248;
             break;
 		
         
-            case "Zona 19 - Ciudad": $tienda_asignada = 2239;
-            break;
-			
-			
-       
-        case "Zona 17 - Ciudad": $tienda_asignada = 2239;
-            break;
-        case "Zona 25 - Ciudad": $tienda_asignada = 2239;
-            break;
-        case "Km 16 Carretera al Altlántico": $tienda_asignada = 2239;
-            break;
-      
-
-
-
 
             // Condado
         case "Carretera a El Salvador hasta el km 26": $tienda_asignada = 3066;
