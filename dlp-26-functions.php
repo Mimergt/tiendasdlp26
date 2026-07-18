@@ -466,6 +466,18 @@ function new_store_meta($order_id) {
         case "Colonia el inciencio zona 3 capital": $tienda_asignada = 2239;
             break;
 
+        // San Cristobal 3068
+        case "Lomas de portugal ": $tienda_asignada = 3068;
+            break;
+        case "zona 1 de mixco (Centro)": $tienda_asignada = 3068;
+            break;
+        case "Estadio Santo Domingo Zona 1 de Mixco": $tienda_asignada = 3068;
+            break;
+        case "Colonia Maravilla Zona 1 de Mixco ": $tienda_asignada = 3068;
+            break;
+        case "Lo de Coy, Zona 1 de Mixco, SOLO HASTA EL KM. 14": $tienda_asignada = 3068;
+            break;
+
         // Montufar 2242
         case "4 grados norte zona 4 capital": $tienda_asignada = 2242;
             break;

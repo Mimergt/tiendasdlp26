@@ -93,6 +93,12 @@ jQuery(document).ready(function ($) {
   'El gallito zona 3 capital',
   'Avenida bolivar zona 3 capital',
   'Colonia el inciencio zona 3 capital',
+  // San Cristobal 3068
+  'Lomas de portugal ',
+  'zona 1 de mixco (Centro)',
+  'Estadio Santo Domingo Zona 1 de Mixco',
+  'Colonia Maravilla Zona 1 de Mixco ',
+  'Lo de Coy, Zona 1 de Mixco, SOLO HASTA EL KM. 14',
   // Montufar 2242
   '4 grados norte zona 4 capital',
   'Jardin botanico zona 9 capital',
