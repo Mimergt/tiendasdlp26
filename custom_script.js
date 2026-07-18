@@ -93,6 +93,7 @@ jQuery(document).ready(function ($) {
   'El gallito zona 3 capital',
   'Avenida bolivar zona 3 capital',
   'Colonia el inciencio zona 3 capital',
+  // Condado C 3066
   'Residenciales montebello 2',
   'Condominio Cumbres de la Arboleda ',
   'Residenciales vistas del valle',
@@ -312,7 +313,58 @@ jQuery(document).ready(function ($) {
    let gtgu_opciones_6 = [''];
    let gtgu_opciones_7 = [''];
 	
-  let gtgu_opciones_8 = [''];
+
+  let gtgu_opciones_8 = [
+    '',
+    // Cuatro Caminos 103619 (Totonicapan)
+    'Nueva colonia salcaja',
+    'Condominio terraverde salcaja',
+    'Villas de san luis salcaja',
+    'Cementerio municipal de salcaja',
+    'Residenciales villas de san andres',
+    'Colonia el cangrejo de oro salcaja',
+    'Lotificacion maria fernanda salcaja',
+    'Colonia casa blanca salcaja',
+    'Colonia la paz salcaja',
+    'Colonia bella vista salcaja',
+    'Barrio el carmen salcaja',
+    'Colonia el esfuerzo salcaja',
+    'Barrio la cienega totonicapan',
+    'San cristobal totonicapan',
+    'Barrio la independencia totonicapan',
+    'La democracia totonicapan',
+    'La moreira san cristobal',
+    'Barrio el calvario zona 4 totonicapan',
+    'Llega hasta parque san miguel toto',
+    'Colonia angelita totonicapan',
+    'Centro de totonicapan zona 1 hasta la 5',
+    'Hospital nacional jose felipe hores toto',
+    'Bomberos voluntarios totonicapan',
+    'Universidad mariano galvez totonicapan',
+    'INACOP totonicapan',
+    'Colonia la bendicion totonicapan',
+    'Poxlajuj totonicapan',
+    'Tres coronas totonicapan',
+    'Xantun totonicapan',
+    'Barrio san sebastian',
+    'Calle pahula',
+    'Barrio las claras',
+    'Barrio los chorros',
+    'Puente la marimba',
+    'Cuatro caminos',
+    'Rastro',
+    'Xesuc',
+    'Pacanac',
+    'San francisco el alto',
+    'San adres xecul',
+    'Xetacabaj',
+    'Curruchiche',
+    'Xecanchavox totonicapan',
+    'Patachaj',
+    'Patzizil',
+    'Cacerio la libertad',
+    'San jose chiquilaja'
+  ];
 	
 	
  let gtgu_opciones_9 = [
