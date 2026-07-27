@@ -93,7 +93,7 @@ jQuery(document).ready(function ($) {
   'El gallito zona 3 capital',
   'Avenida bolivar zona 3 capital',
   'Colonia el inciencio zona 3 capital',
-  // Varieta 2244
+  // Nogales 155165
   'Parque ecologico la asuncion zona 5',
   'Arcos 1,2,3,4,5,6 y 7 zona 5',
   'Novicentro zona 5',
@@ -849,7 +849,7 @@ jQuery(document).ready(function ($) {
     'Condominio villa de asturias',
     'Granjas maysol',
     'Condominio burgos',
-    'san juan ostuncalco',
+ //   'san juan ostuncalco',
     'Cantabria country club',
     'La esperanza',
     'Condominio la cañada 1 y 2',
@@ -1296,6 +1296,152 @@ let gtgu_opciones_14 = [
 	
   let gtgu_opciones_13 = [''];
 
+  let dlpDeliveryFilterState = {
+    ready: false,
+    storeStatus: {},
+    zoneStoreMap: {}
+  };
+
+  function isDeliveryCheckoutSelected() {
+    var selectedOrderType = $('input[name="woofood_order_type"]:checked').val();
+    return selectedOrderType === 'delivery';
+  }
+
+  function setDeliveryFilterState(payload) {
+    if (!payload || typeof payload !== 'object') {
+      return;
+    }
+
+    dlpDeliveryFilterState.storeStatus = payload.storeStatus || {};
+    dlpDeliveryFilterState.zoneStoreMap = payload.zoneStoreMap || {};
+    dlpDeliveryFilterState.ready = true;
+  }
+
+  function restoreDeliveryFilterStateFromSession() {
+    try {
+      var rawData = window.sessionStorage.getItem('dlp26_delivery_filter_state');
+      if (!rawData) {
+        return;
+      }
+      var parsedData = JSON.parse(rawData);
+      setDeliveryFilterState(parsedData);
+    } catch (error) {
+      // Ignore session cache parse issues and continue with runtime fetch.
+    }
+  }
+
+  function persistDeliveryFilterStateToSession(payload) {
+    try {
+      window.sessionStorage.setItem('dlp26_delivery_filter_state', JSON.stringify(payload));
+    } catch (error) {
+      // Ignore storage quota issues silently.
+    }
+  }
+
+  function isAddressAllowedForDelivery(address) {
+    if (!address || !dlpDeliveryFilterState.ready) {
+      return true;
+    }
+
+    var storeId = dlpDeliveryFilterState.zoneStoreMap[address];
+    if (!storeId) {
+      return true;
+    }
+
+    var status = dlpDeliveryFilterState.storeStatus[String(storeId)];
+    if (!status || typeof status !== 'object') {
+      return true;
+    }
+
+    return !!status.store_enabled && !!status.delivery_enabled;
+  }
+
+  function getFilteredZonesByOrderType(optionsList) {
+    if (!Array.isArray(optionsList) || !isDeliveryCheckoutSelected()) {
+      return optionsList;
+    }
+
+    return optionsList.filter(function (address, index) {
+      if (index === 0 || address === '') {
+        return true;
+      }
+      return isAddressAllowedForDelivery(address);
+    });
+  }
+
+  function getOptionsByState(stateCode) {
+    if (stateCode === "GT-GU") { return gtgu_opciones_1; }
+    if (stateCode === "GT-QZ") { return gtgu_opciones_2; }
+    if (stateCode === "GT-CM") { return gtgu_opciones_3; }
+    if (stateCode === "GT-ES") { return gtgu_opciones_4; }
+    if (stateCode === "GT-JU") { return gtgu_opciones_5; }
+    if (stateCode === "GT-RE") { return gtgu_opciones_6; }
+    if (stateCode === "GT-CO") { return gtgu_opciones_7; }
+    if (stateCode === "GT-HU") { return gtgu_opciones_14; }
+    if (stateCode === "GT-TO") { return gtgu_opciones_8; }
+    if (stateCode === "GT-SU") { return gtgu_opciones_9; }
+    if (stateCode === "GT-JA") { return gtgu_opciones_10; }
+    if (stateCode === "GT-SC") { return gtgu_opciones_11; }
+    if (stateCode === "GT-CQ") { return gtgu_opciones_12; }
+    return gtgu_opciones_13;
+  }
+
+  function renderZoneOptions(optionsList) {
+    var currentValue = $('#billing_city_2').val();
+    $('#billing_city_2').find('option').remove();
+
+    var selectElement = document.getElementById('billing_city_2');
+    if (!selectElement || !Array.isArray(optionsList)) {
+      return;
+    }
+
+    for (var i = 0; i < optionsList.length; i++) {
+      var optionElement = document.createElement('option');
+      optionElement.innerHTML = optionsList[i];
+      optionElement.value = optionsList[i];
+      selectElement.appendChild(optionElement);
+    }
+
+    if (currentValue && optionsList.indexOf(currentValue) !== -1) {
+      $('#billing_city_2').val(currentValue);
+    }
+  }
+
+  function refreshCityOptionsForCurrentState() {
+    var selectedState = $('#billing_state_2').val() || '';
+    var allStateOptions = getOptionsByState(selectedState);
+    var visibleStateOptions = getFilteredZonesByOrderType(allStateOptions);
+    renderZoneOptions(visibleStateOptions);
+  }
+
+  function fetchDeliveryFilterData() {
+    if (typeof dlpDeliveryFilterConfig === 'undefined' || !dlpDeliveryFilterConfig.ajaxUrl) {
+      return;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: dlpDeliveryFilterConfig.ajaxUrl,
+      dataType: 'json',
+      timeout: 5000,
+      data: {
+        action: dlpDeliveryFilterConfig.action,
+        nonce: dlpDeliveryFilterConfig.nonce,
+        _ts: Date.now(),
+        _seed: dlpDeliveryFilterConfig.requestTs || ''
+      }
+    }).done(function (response) {
+      if (response && response.success && response.data) {
+        setDeliveryFilterState(response.data);
+        persistDeliveryFilterStateToSession(response.data);
+      }
+      refreshCityOptionsForCurrentState();
+    }).fail(function () {
+      restoreDeliveryFilterStateFromSession();
+      refreshCityOptionsForCurrentState();
+    });
+  }
+
   // $( "<br><br><b>Nombre de la Dirección</b>" ).insertBefore( ".woocommerce-billing-fields__field-wrapper" );
 
   $('#billing_city').prop('type', 'hidden');
@@ -1318,41 +1464,17 @@ let gtgu_opciones_14 = [
   $("#billing_address_2_field").prepend('<label for="billing_city" class="">Ingrese su dirección completa&nbsp;<abbr class="required" title="obligatorio">*</abbr></label>');
 
   $("body").on('change', '#billing_state_2', function () {
-
     let estado_seleccionado = $(this).val();
     $('#billing_state').val(estado_seleccionado);
-
-    if (estado_seleccionado === "GT-GU") { arreglo(gtgu_opciones_1); }
-    if (estado_seleccionado === "GT-QZ") { arreglo(gtgu_opciones_2); }
-    if (estado_seleccionado === "GT-CM") { arreglo(gtgu_opciones_3); }
-    if (estado_seleccionado === "GT-ES") { arreglo(gtgu_opciones_4); }
-    if (estado_seleccionado === "GT-JU") { arreglo(gtgu_opciones_5); }
-    if (estado_seleccionado === "GT-RE") { arreglo(gtgu_opciones_6); }  
-    if (estado_seleccionado === "GT-CO") { arreglo(gtgu_opciones_7); }  	  
-    if (estado_seleccionado === "GT-HU") { arreglo(gtgu_opciones_14); }
-    if (estado_seleccionado === "GT-TO") { arreglo(gtgu_opciones_8); }
-    if (estado_seleccionado === "GT-SU") { arreglo(gtgu_opciones_9); }
-    if (estado_seleccionado === "GT-JA") { arreglo(gtgu_opciones_10); }	  
-    if (estado_seleccionado === "GT-SC") { arreglo(gtgu_opciones_11); }	  	
-    if (estado_seleccionado === "GT-CQ") { arreglo(gtgu_opciones_12); }	 
-	  
-    if (estado_seleccionado === "") { arreglo(gtgu_opciones_13); }
-    
-    
-
-    function arreglo(cual) {
-      $('#billing_city_2').find('option').remove();
-      var sel = document.getElementById('billing_city_2');
-      for (var i = 0; i < cual.length; i++) {
-        var opt = document.createElement('option');
-        opt.innerHTML = cual[i];
-        opt.value = cual[i];
-        sel.appendChild(opt);
-      }
-    }
-
-
+    refreshCityOptionsForCurrentState();
   });
+
+  $("body").on('change', 'input[name="woofood_order_type"]', function () {
+    refreshCityOptionsForCurrentState();
+  });
+
+  restoreDeliveryFilterStateFromSession();
+  fetchDeliveryFilterData();
 
   $("body").on('change', '#billing_city_2', function () {
     $('#billing_city').val($(this).val());

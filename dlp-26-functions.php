@@ -18,9 +18,96 @@ add_action('wp_enqueue_scripts', function() {
     //wp_enqueue_script('google_api');
     wp_register_script('custom_script', site_url() . '/wp-content/themes/dlp/cutosm_script_26.js?var=' . time(), array('jquery'), '4.0.3', true);
     wp_enqueue_script('custom_script');
+    wp_localize_script('custom_script', 'dlpDeliveryFilterConfig', array(
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'action' => 'dlp26_get_delivery_filters',
+        'nonce' => wp_create_nonce('dlp26_delivery_filter_nonce'),
+        'requestTs' => (string) time(),
+    ));
     wp_register_script('locationpicker', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-locationpicker/0.1.12/locationpicker.jquery.min.js', array('jquery'), '4.0.3', false);
     wp_enqueue_script('locationpicker');
 });
+
+function dlp26_parse_zone_store_map() {
+    $file_content = @file_get_contents(__FILE__);
+    if (!is_string($file_content) || $file_content === '') {
+        return array();
+    }
+
+    $matches = array();
+    preg_match_all('/case\s+"([^"]+)"\s*:\s*\$tienda_asignada\s*=\s*([0-9]+)\s*;/', $file_content, $matches, PREG_SET_ORDER);
+
+    if (empty($matches)) {
+        return array();
+    }
+
+    $zone_store_map = array();
+    foreach ($matches as $match) {
+        $zone = isset($match[1]) ? $match[1] : '';
+        $store_id = isset($match[2]) ? intval($match[2]) : 0;
+        if ($zone !== '' && $store_id > 0) {
+            $zone_store_map[$zone] = $store_id;
+        }
+    }
+
+    return $zone_store_map;
+}
+
+function dlp26_build_store_delivery_status_map() {
+    $store_status = array();
+    $stores = get_posts(array(
+        'post_type' => 'extra_store',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+        'no_found_rows' => true,
+    ));
+
+    if (empty($stores)) {
+        return $store_status;
+    }
+
+    foreach ($stores as $store_id) {
+        $store_enabled_raw = get_post_meta($store_id, 'extra_store_enabled', true);
+        $delivery_enabled_raw = get_post_meta($store_id, 'order_type_delivery', true);
+
+        // WooFood stores checkbox flags by presence: if unchecked, the meta key is deleted.
+        $store_enabled = ($store_enabled_raw !== '' && $store_enabled_raw !== null);
+        $delivery_enabled = ($delivery_enabled_raw !== '' && $delivery_enabled_raw !== null);
+
+        // Also support explicit truthy values in case a plugin variation stores booleans.
+        $truthy_values = array('1', 'true', 'yes', 'on', 'delivery');
+        $store_enabled = $store_enabled || in_array(strtolower((string) $store_enabled_raw), $truthy_values, true);
+        $delivery_enabled = $delivery_enabled || in_array(strtolower((string) $delivery_enabled_raw), $truthy_values, true);
+
+        $store_status[(string) $store_id] = array(
+            'store_enabled' => $store_enabled,
+            'delivery_enabled' => $delivery_enabled,
+        );
+    }
+
+    return $store_status;
+}
+
+function dlp26_send_delivery_filters() {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'dlp26_delivery_filter_nonce')) {
+        wp_send_json_error(array('message' => 'Invalid nonce'), 403);
+    }
+
+    nocache_headers();
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
+
+    wp_send_json_success(array(
+        'storeStatus' => dlp26_build_store_delivery_status_map(),
+        'zoneStoreMap' => dlp26_parse_zone_store_map(),
+        'generatedAt' => time(),
+    ));
+}
+
+add_action('wp_ajax_dlp26_get_delivery_filters', 'dlp26_send_delivery_filters');
+add_action('wp_ajax_nopriv_dlp26_get_delivery_filters', 'dlp26_send_delivery_filters');
 
 // The original code is from: https://stackoverflow.com/questions/63066590/allow-customer-to-change-order-status-in-woocommerce/63067443#63067443
 // The original code was for Complete Order. The modifications is for change the order to "ready to pickup (rtp)" we can't make it usefull without use the "on-hold" args.
@@ -466,118 +553,118 @@ function new_store_meta($order_id) {
         case "Colonia el inciencio zona 3 capital": $tienda_asignada = 2239;
             break;
 
-        // Varieta 2244
-        case "Parque ecologico la asuncion zona 5": $tienda_asignada = 2244;
+        // Nogales 155165
+        case "Parque ecologico la asuncion zona 5": $tienda_asignada = 155165;
             break;
-        case "Arcos 1,2,3,4,5,6 y 7 zona 5": $tienda_asignada = 2244;
+        case "Arcos 1,2,3,4,5,6 y 7 zona 5": $tienda_asignada = 155165;
             break;
-        case "Novicentro zona 5": $tienda_asignada = 2244;
+        case "Novicentro zona 5": $tienda_asignada = 155165;
             break;
-        case "Plaza asuncion zona 5": $tienda_asignada = 2244;
+        case "Plaza asuncion zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia chacara zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia chacara zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia asuncion zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia asuncion zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Torre asuncion sur zona 5 capital": $tienda_asignada = 2244;
+        case "Torre asuncion sur zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia Providencia zona 5 capital ": $tienda_asignada = 2244;
+        case "Colonia Providencia zona 5 capital ": $tienda_asignada = 155165;
             break;
-        case "Barrio arrivillaga zona 5 capital": $tienda_asignada = 2244;
+        case "Barrio arrivillaga zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Parque navidad zona 5 capital": $tienda_asignada = 2244;
+        case "Parque navidad zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Casa del niño zona 5 capital": $tienda_asignada = 2244;
+        case "Casa del niño zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Mercado la palmita zona 5": $tienda_asignada = 2244;
+        case "Mercado la palmita zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia san pedrito zona 5": $tienda_asignada = 2244;
+        case "Colonia san pedrito zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia vivibien zona 5": $tienda_asignada = 2244;
+        case "Colonia vivibien zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia santa ana zona 5": $tienda_asignada = 2244;
+        case "Colonia santa ana zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia la palmita zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia la palmita zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia abril zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia abril zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia saravia zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia saravia zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Condominio jardinez del centro zona 5": $tienda_asignada = 2244;
+        case "Condominio jardinez del centro zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia ferrocarrilera zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia ferrocarrilera zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia monja blanca zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia monja blanca zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia la labor zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia la labor zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia la fuente zona 5 capital": $tienda_asignada = 2244;
+        case "Colonia la fuente zona 5 capital": $tienda_asignada = 155165;
             break;
-        case "Colonia lourdes zona 16": $tienda_asignada = 2244;
+        case "Colonia lourdes zona 16": $tienda_asignada = 155165;
             break;
-        case "Aldea acatan zona 16": $tienda_asignada = 2244;
+        case "Aldea acatan zona 16": $tienda_asignada = 155165;
             break;
-        case "Colonia santa rosita zona 16": $tienda_asignada = 2244;
+        case "Colonia santa rosita zona 16": $tienda_asignada = 155165;
             break;
-        case "Residenciales valles de acatan zona 16": $tienda_asignada = 2244;
+        case "Residenciales valles de acatan zona 16": $tienda_asignada = 155165;
             break;
-        case "Condominio jardines de maribel": $tienda_asignada = 2244;
+        case "Condominio jardines de maribel": $tienda_asignada = 155165;
             break;
-        case "Acacias de cayala zona 16": $tienda_asignada = 2244;
+        case "Acacias de cayala zona 16": $tienda_asignada = 155165;
             break;
-        case "Portal de cayala zona 16": $tienda_asignada = 2244;
+        case "Portal de cayala zona 16": $tienda_asignada = 155165;
             break;
-        case "Acantos de cayala zona 16": $tienda_asignada = 2244;
+        case "Acantos de cayala zona 16": $tienda_asignada = 155165;
             break;
-        case "Hacienda real zona 16": $tienda_asignada = 2244;
+        case "Hacienda real zona 16": $tienda_asignada = 155165;
             break;
-        case "Lotificacion san isidro zona 16": $tienda_asignada = 2244;
+        case "Lotificacion san isidro zona 16": $tienda_asignada = 155165;
             break;
-        case "San gaspar zona 16": $tienda_asignada = 2244;
+        case "San gaspar zona 16": $tienda_asignada = 155165;
             break;
-        case "Ciudad vieja 1 y 2 zona 16": $tienda_asignada = 2244;
+        case "Ciudad vieja 1 y 2 zona 16": $tienda_asignada = 155165;
             break;
-        case "Residenciales san carlos zona 16": $tienda_asignada = 2244;
+        case "Residenciales san carlos zona 16": $tienda_asignada = 155165;
             break;
-        case "Colonia montesano zona 16 c": $tienda_asignada = 2244;
+        case "Colonia montesano zona 16 c": $tienda_asignada = 155165;
             break;
-        case "Alcazar de santa amelia zona 16": $tienda_asignada = 2244;
+        case "Alcazar de santa amelia zona 16": $tienda_asignada = 155165;
             break;
-        case "Residenciales puerta de hierro zona 16": $tienda_asignada = 2244;
+        case "Residenciales puerta de hierro zona 16": $tienda_asignada = 155165;
             break;
-        case "San isidro zona 16": $tienda_asignada = 2244;
+        case "San isidro zona 16": $tienda_asignada = 155165;
             break;
-        case "Condominio jardines de san isidro zona 16": $tienda_asignada = 2244;
+        case "Condominio jardines de san isidro zona 16": $tienda_asignada = 155165;
             break;
-        case "Ensenada de san isidro zona 16": $tienda_asignada = 2244;
+        case "Ensenada de san isidro zona 16": $tienda_asignada = 155165;
             break;
-        case "Residenciales vista hermosa 4 zona 16": $tienda_asignada = 2244;
+        case "Residenciales vista hermosa 4 zona 16": $tienda_asignada = 155165;
             break;
-        case "Colonia trinidad zona 15": $tienda_asignada = 2244;
+        case "Colonia trinidad zona 15": $tienda_asignada = 155165;
             break;
-        case "Colonia tecun human zona 15": $tienda_asignada = 2244;
+        case "Colonia tecun human zona 15": $tienda_asignada = 155165;
             break;
-        case "Vista hermosa zona 15": $tienda_asignada = 2244;
+        case "Vista hermosa zona 15": $tienda_asignada = 155165;
             break;
-        case "Condominio lomas del refugio zona 15": $tienda_asignada = 2244;
+        case "Condominio lomas del refugio zona 15": $tienda_asignada = 155165;
             break;
-        case "Vistas de hacienda real zona 15": $tienda_asignada = 2244;
+        case "Vistas de hacienda real zona 15": $tienda_asignada = 155165;
             break;
-        case "Valles de vista hermosa zona 15": $tienda_asignada = 2244;
+        case "Valles de vista hermosa zona 15": $tienda_asignada = 155165;
             break;
-        case "Colonia covias zona 5": $tienda_asignada = 2244;
+        case "Colonia covias zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia lomas de eden zona 5": $tienda_asignada = 2244;
+        case "Colonia lomas de eden zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia la limonada": $tienda_asignada = 2244;
+        case "Colonia la limonada": $tienda_asignada = 155165;
             break;
-        case "Colonia el esfuerzo zona 5": $tienda_asignada = 2244;
+        case "Colonia el esfuerzo zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia santo domingo zona 5": $tienda_asignada = 2244;
+        case "Colonia santo domingo zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia el tuerto zona 5": $tienda_asignada = 2244;
+        case "Colonia el tuerto zona 5": $tienda_asignada = 155165;
             break;
-        case "Colonia 15 de agosto zona 5": $tienda_asignada = 2244;
+        case "Colonia 15 de agosto zona 5": $tienda_asignada = 155165;
             break;
 
         // San Juan 24829
@@ -1461,8 +1548,8 @@ function new_store_meta($order_id) {
             break;
         case "Residenciales la villa zona 9 de xela": $tienda_asignada = 24021;
             break;
-        case "Condominio valle verde": $tienda_asignada = 24021;
-            break;
+       // case "Condominio valle verde": $tienda_asignada = 24021;
+         //   break;
         case "Condominio Helvetia": $tienda_asignada = 24021;
             break;
         case "Condominio agapantos zona 8 de xela": $tienda_asignada = 24021;
@@ -2592,53 +2679,53 @@ case "Santa Catarina Barahona": $tienda_asignada = 126504; break;
 case "San Andrés Ceballos": $tienda_asignada = 126504; break;
 			
    
-// Chiquimula 14197
-case "Barrio el molino chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el caminero chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el banvi chiquimula": $tienda_asignada = 14197; break;
-case "Colonia ruano chiquimula": $tienda_asignada = 14197; break;
-case "Residenciales Campollano premier chiquimula": $tienda_asignada = 14197; break;
-case "Barrio shusho abajo chiquimula": $tienda_asignada = 14197; break;
-case "Villas jose chiquimula": $tienda_asignada = 14197; break;
-case "Colonia los cerezos chiquimula": $tienda_asignada = 14197; break;
-case "Residenciales prados de canaan chiquimula": $tienda_asignada = 14197; break;
-case "Condominio Cebalia chiquimula": $tienda_asignada = 14197; break;
-case "Colonia shoporin chiquimula": $tienda_asignada = 14197; break;
-case "Colonia Prados de de san andres chiquimula": $tienda_asignada = 14197; break;
-case "Residenciales villa verde chiquimula": $tienda_asignada = 14197; break;
-case "Condado la Pradera chiquimula": $tienda_asignada = 14197; break;
-case "Colonia los tanques chiquimula": $tienda_asignada = 14197; break;
-case "Residenciales el Jurgalion chiquimula": $tienda_asignada = 14197; break;
-case "Prados de chiquimula": $tienda_asignada = 14197; break;
-case "Residencial paseo real chiquimula": $tienda_asignada = 14197; break;
-case "Colonia petapilla chiquimula": $tienda_asignada = 14197; break;
-case "Colonia sasmo arriba chiquimula": $tienda_asignada = 14197; break;
-case "Barrio el teatro chiquimula": $tienda_asignada = 14197; break;
-case "Colonia de linda vista chiquimula": $tienda_asignada = 14197; break;
-case "Colonia buena ventura chiquimula": $tienda_asignada = 14197; break;
-case "Residenciales Chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el Angel chiquimula": $tienda_asignada = 14197; break;
-case "Colonia las brisas de san jose chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el manguito chiquimula": $tienda_asignada = 14197; break;
-case "Colonia las flores chiquimula": $tienda_asignada = 14197; break;
-case "Barrio san pedrito Chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el Centro chiquimula": $tienda_asignada = 14197; break;
-case "Colonia Lemus chiquimula": $tienda_asignada = 14197; break;
-case "Barrio el Zapotillo": $tienda_asignada = 14197; break;
-case "Colonia las Lomas chiquimula": $tienda_asignada = 14197; break;
-case "Colonia las rosas Chiquimula": $tienda_asignada = 14197; break;
-case "Residenciales GYT chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el Mirador chiquimula": $tienda_asignada = 14197; break;
-case "Colonia el milagro chiquimula": $tienda_asignada = 14197; break;
-case "Colonia Minerva chiquimula": $tienda_asignada = 14197; break;
-case "Colonia la esperanza Chiquimula": $tienda_asignada = 14197; break;
-case "Barrio san isidro chiquimula": $tienda_asignada = 14197; break;
-case "Jardines de concepcion chiquimula": $tienda_asignada = 14197; break;
-case "Barrio El Jurgallón chiquimula": $tienda_asignada = 14197; break;
-case "Barrio de Candelaria chiquimula": $tienda_asignada = 14197; break;
-case "Barrio el calvario Chiquimula": $tienda_asignada = 14197; break;
-case "Barrio la democracia chiquimula": $tienda_asignada = 14197; break;
-case "Lotificación Villas de Manolo chiquimula": $tienda_asignada = 14197; break;
+// Chiquimula 141967
+case "Barrio el molino chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el caminero chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el banvi chiquimula": $tienda_asignada = 141967; break;
+case "Colonia ruano chiquimula": $tienda_asignada = 141967; break;
+case "Residenciales Campollano premier chiquimula": $tienda_asignada = 141967; break;
+case "Barrio shusho abajo chiquimula": $tienda_asignada = 141967; break;
+case "Villas jose chiquimula": $tienda_asignada = 141967; break;
+case "Colonia los cerezos chiquimula": $tienda_asignada = 141967; break;
+case "Residenciales prados de canaan chiquimula": $tienda_asignada = 141967; break;
+case "Condominio Cebalia chiquimula": $tienda_asignada = 141967; break;
+case "Colonia shoporin chiquimula": $tienda_asignada = 141967; break;
+case "Colonia Prados de de san andres chiquimula": $tienda_asignada = 141967; break;
+case "Residenciales villa verde chiquimula": $tienda_asignada = 141967; break;
+case "Condado la Pradera chiquimula": $tienda_asignada = 141967; break;
+case "Colonia los tanques chiquimula": $tienda_asignada = 141967; break;
+case "Residenciales el Jurgalion chiquimula": $tienda_asignada = 141967; break;
+case "Prados de chiquimula": $tienda_asignada = 141967; break;
+case "Residencial paseo real chiquimula": $tienda_asignada = 141967; break;
+case "Colonia petapilla chiquimula": $tienda_asignada = 141967; break;
+case "Colonia sasmo arriba chiquimula": $tienda_asignada = 141967; break;
+case "Barrio el teatro chiquimula": $tienda_asignada = 141967; break;
+case "Colonia de linda vista chiquimula": $tienda_asignada = 141967; break;
+case "Colonia buena ventura chiquimula": $tienda_asignada = 141967; break;
+case "Residenciales Chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el Angel chiquimula": $tienda_asignada = 141967; break;
+case "Colonia las brisas de san jose chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el manguito chiquimula": $tienda_asignada = 141967; break;
+case "Colonia las flores chiquimula": $tienda_asignada = 141967; break;
+case "Barrio san pedrito Chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el Centro chiquimula": $tienda_asignada = 141967; break;
+case "Colonia Lemus chiquimula": $tienda_asignada = 141967; break;
+case "Barrio el Zapotillo": $tienda_asignada = 141967; break;
+case "Colonia las Lomas chiquimula": $tienda_asignada = 141967; break;
+case "Colonia las rosas Chiquimula": $tienda_asignada = 141967; break;
+case "Residenciales GYT chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el Mirador chiquimula": $tienda_asignada = 141967; break;
+case "Colonia el milagro chiquimula": $tienda_asignada = 141967; break;
+case "Colonia Minerva chiquimula": $tienda_asignada = 141967; break;
+case "Colonia la esperanza Chiquimula": $tienda_asignada = 141967; break;
+case "Barrio san isidro chiquimula": $tienda_asignada = 141967; break;
+case "Jardines de concepcion chiquimula": $tienda_asignada = 141967; break;
+case "Barrio El Jurgallón chiquimula": $tienda_asignada = 141967; break;
+case "Barrio de Candelaria chiquimula": $tienda_asignada = 141967; break;
+case "Barrio el calvario Chiquimula": $tienda_asignada = 141967; break;
+case "Barrio la democracia chiquimula": $tienda_asignada = 141967; break;
+case "Lotificación Villas de Manolo chiquimula": $tienda_asignada = 141967; break;
 
 			//default: $tienda_asignada = 9419;
 	    default: $tienda_asignada = 2239;
@@ -2685,7 +2772,7 @@ function update_store_name_meta($order_id) {
     switch ($store_id) {
         case 2239: $store_name = 'Calle Marti'; break;
         case 2241: $store_name = 'Diagonal 6'; break;
-        case 2244: $store_name = 'Varieta'; break;
+        case 2244: $store_name = 'Nogales'; break;
         case 2238: $store_name = 'Alamos'; break;
         case 2249: $store_name = 'Plaza Madero'; break;
         case 3068: $store_name = 'San Cristobal'; break;
@@ -2714,7 +2801,7 @@ function update_store_name_meta($order_id) {
         case 2246: $store_name = 'Zona 1'; break;
         case 126504: $store_name = 'Antigua'; break;
         case 14197: $store_name = 'Chiquimula'; break;
-        case 141967: $store_name = 'Chiquimula'; break;
+       // case 141967: $store_name = 'Chiquimula'; break;
         case 144324: $store_name = 'Huehuetenango'; break;		
         case 155165: $store_name = 'Nogales'; break;	
         case 156344: $store_name = 'Mazate'; break;				
@@ -2913,13 +3000,3 @@ function validate_billing_fields( $fields, $errors ) {
         $errors->add( 'billing_state_2_error', 'Por favor selecciona un Departamento.' );
     }
 }
-
-
-
-
-
-
-
-
-
-
